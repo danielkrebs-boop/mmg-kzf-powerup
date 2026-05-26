@@ -18,7 +18,6 @@
   <button onclick="speichern()">Speichern</button>
 
 <script>
-  var t = window.TrelloPowerUp.iframe();
   var params = new URLSearchParams(window.location.search);
   var score = parseInt(params.get('score'));
   var label = decodeURIComponent(params.get('label') || '');
@@ -40,15 +39,15 @@ function speichern() {
       + 'Status: ' + label + '\n'
       + 'Notiz: ' + notiz;
     
-var ctx_promise = t.getContext();
-    alert('Promise: ' + typeof ctx_promise);
-    ctx_promise.then(function(ctx) {
+var t2 = window.TrelloPowerUp.iframe();
+    alert('t2 type: ' + typeof t2);
+    t2.getContext().then(function(ctx) {
  
 return fetch('https://api.trello.com/1/cards/' + ctx.card + '/actions/comments?key=d88c51162642265f49f923163f6336be&token=ATTA5c652fd6d080dc0d3abf82e3275c24e1f5d203a64abfd7a290132d94d5fc5c4320F128B7&text=' + encodeURIComponent(kommentar), {
   method: 'POST'
 });
     }).then(function() {
-      t.closePopup();
+      t2.closePopup();
    }).catch(function(err) {
       alert('Fehler: ' + err.message);
     });
