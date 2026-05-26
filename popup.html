@@ -42,6 +42,7 @@ function speichern() {
       + 'Notiz: ' + notiz;
 
     t.getContext().then(function(ctx) {
+    alert('Card ID: ' + ctx.card);
 return fetch('https://api.trello.com/1/cards/' + ctx.card + '/actions/comments?key=DEIN_KEY&token=DEIN_TOKEN&text=' + encodeURIComponent(kommentar), {
   method: 'POST'
 });
