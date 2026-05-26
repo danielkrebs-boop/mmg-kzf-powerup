@@ -30,8 +30,7 @@ function openNotiz(t, score, label) {
   return t.card('id').then(function(card) {
     return t.popup({
       title: 'Notiz eingeben',
-      url: 'https://danielkrebs-boop.github.io/mmg-kzf-powerup/popup.html?score=' + score + '&label=' + encodeURIComponent(label) + '&cardId=' + card.id,
-      height: 250
+url: 'https://danielkrebs-boop.github.io/mmg-kzf-powerup/popup.html?v=2&score=' + score + '&label=' + encodeURIComponent(label) + '&cardId=' + card.id,      height: 250
     });
   });
 }
