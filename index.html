@@ -27,10 +27,12 @@ window.TrelloPowerUp.initialize({
 });
 
 function openNotiz(t, score, label) {
-  return t.popup({
-    title: 'Notiz eingeben',
-    url: 'https://danielkrebs-boop.github.io/mmg-kzf-powerup/popup.html?score=' + score + '&label=' + encodeURIComponent(label),
-    height: 250
+  return t.card('id').then(function(card) {
+    return t.popup({
+      title: 'Notiz eingeben',
+      url: 'https://danielkrebs-boop.github.io/mmg-kzf-powerup/popup.html?score=' + score + '&label=' + encodeURIComponent(label) + '&cardId=' + card.id,
+      height: 250
+    });
   });
 }
 </script>
