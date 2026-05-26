@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+</head>
+<body>
+<script>
+window.TrelloPowerUp.initialize({
+  'card-buttons': function(t, opts) {
+    return [{
+      icon: 'https://cdn.iconscout.com/icon/free/png-256/free-smile-1767817-1502407.png',
+      text: '📊 Zufriedenheit',
+      callback: function(t) {
+        return t.popup({
+          title: 'Kundenzufriedenheit erfassen',
+          items: [
+            { text: '😊😊 Sehr zufrieden', callback: function(t) { return openNotiz(t, 1, 'Sehr zufrieden'); }},
+            { text: '😊 Zufrieden',        callback: function(t) { return openNotiz(t, 2, 'Zufrieden'); }},
+            { text: '😐 Neutral',          callback: function(t) { return openNotiz(t, 3, 'Neutral'); }},
+            { text: '😟 Eher unzufrieden', callback: function(t) { return openNotiz(t, 4, 'Eher unzufrieden'); }},
+            { text: '😡 Sehr unzufrieden', callback: function(t) { return openNotiz(t, 5, 'Sehr unzufrieden'); }}
+          ]
+        });
+      }
+    }];
+  }
+});
+
+function openNotiz(t, score, label) {
+  return t.popup({
+    title: 'Notiz eingeben',
+    url: 'https://danielkrebs-boop.github.io/mmg-kzf-powerup/popup.html?score=' + score + '&label=' + encodeURIComponent(label),
+    height: 250
+  });
+}
+</script>
+</body>
+</html>
