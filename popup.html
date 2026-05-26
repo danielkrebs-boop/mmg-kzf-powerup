@@ -47,8 +47,8 @@ return fetch('https://api.trello.com/1/cards/' + ctx.card + '/actions/comments?k
 });
     }).then(function() {
       t.closePopup();
-    }).catch(function(err) {
-      console.error(err);
+   }).catch(function(err) {
+      alert('Fehler: ' + err.message);
     });
   }
 </script>
