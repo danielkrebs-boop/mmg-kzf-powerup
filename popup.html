@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 12px; margin: 0; background: #fff; }
+    textarea { width: 100%; height: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; resize: none; box-sizing: border-box; }
+    button { margin-top: 8px; width: 100%; padding: 8px; background: #0079BF; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; }
+    button:hover { background: #005f9e; }
+    .label { font-size: 13px; color: #444; margin-bottom: 8px; }
+    .error { color: red; font-size: 12px; margin-top: 4px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="label" id="status-label"></div>
+  <textarea id="notiz" placeholder=""></textarea>
+  <div class="error" id="error">Bitte eine Notiz eingeben.</div>
+  <button onclick="speichern()">Speichern</button>
+
+<script>
+  var t = window.TrelloPowerUp.iframe();
+  var params = new URLSearchParams(window.location.search);
+  var score = parseInt(params.get('score'));
+  var label = decodeURIComponent(params.get('label') || '');
+
+  document.getElementById('status-label').innerHTML = 'Status: <strong>' + label + '</strong>';
+  document.getElementById('notiz').placeholder = score <= 2
+    ? 'Positives Kundenfeedback oder Lob...'
+    : 'Grund + geplante Maßnahmen...';
+
+  function speichern() {
+    var notiz = document.getElementById('notiz').value.trim();
+    if (!notiz) {
+      document.getElementById('error').style.display = 'block';
+      return;
+    }
+
+    var emoji = score <= 2 ? '✅' : score === 3 ? '➖' : '⚠️';
+    var kommentar = emoji + ' Kundenzufriedenheit aktualisiert\n'
+      + 'Status: ' + label + '\n'
+      + 'Notiz: ' + notiz;
+
+    t.getContext().then(function(ctx) {
+      return fetch('https://api.trello.com/1/cards/' + ctx.card + '/actions/comments?key=d88c51162642265f49f923163f6336be&token=ATTA5c652fd6d080dc0d3abf82e3275c24e1f5d203a64abfd7a290132d94d5fc5c4320F128B7
+', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: kommentar })
+      });
+    }).then(function() {
+      t.closePopup();
+    }).catch(function(err) {
+      console.error(err);
+    });
+  }
+</script>
+</body>
+</html>
