@@ -43,8 +43,12 @@ var cardId = params.get('cardId');
     alert('cardId: ' + cardId);
     fetch('https://api.trello.com/1/cards/' + cardId + '/actions/comments?key=d88c51162642265f49f923163f6336be&token=ATTA5c652fd6d080dc0d3abf82e3275c24e1f5d203a64abfd7a290132d94d5fc5c4320F128B7&text=' + encodeURIComponent(kommentar), {
       method: 'POST'
-    }).then(function(response) {
-      alert('Status: ' + response.status);
+   }).then(function(response) {
+      if (response.ok) {
+        window.location.href = 'about:blank';
+      } else {
+        alert('Fehler: Status ' + response.status);
+      }
     }).catch(function(err) {
       alert('Fehler: ' + err.message);
     });
