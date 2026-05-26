@@ -39,18 +39,49 @@ function speichern() {
       + 'Status: ' + label + '\n'
       + 'Notiz: ' + notiz;
     
-var cardId = params.get('cardId')
-    fetch('https://api.trello.com/1/cards/' + cardId + '/actions/comments?key=d88c51162642265f49f923163f6336be&token=ATTA5c652fd6d080dc0d3abf82e3275c24e1f5d203a64abfd7a290132d94d5fc5c4320F128B7&text=' + encodeURIComponent(kommentar), {
-      method: 'POST'
-   }).then(function(response) {
-      if (response.ok) {
-        window.location.href = 'about:blank';
-      } else {
-        alert('Fehler: Status ' + response.status);
-      }
-    }).catch(function(err) {
-      alert('Fehler: ' + err.message);
+var cardId = params.get('cardId');
+var labelMap = {
+  1: '6a0f38aedf026515e93b79b7',
+  2: '6a0f38e53aaefb96b65c0361',
+  3: '6a0f3923e86c1ae238909191',
+  4: '6a0f3940c3d2a46602c46e4d',
+  5: '6a0f395c07b25c6514de0603'
+};
+var kzfLabelIds = Object.values(labelMap);
+var zielLabelId = labelMap[scoreNum];
+var baseUrl = 'https://api.trello.com/1/cards/' + cardId;
+var auth = 'key=d88c51162642265f49f923163f6336be&token=ATTA5c652fd6d080dc0d3abf82e3275c24e1f5d203a64abfd7a290132d94d5fc5c4320F128B7';
+
+// Schritt 1: Alle KZF-Labels entfernen
+var removePromises = kzfLabelIds.map(function(labelId) {
+  return fetch(baseUrl + '/idLabels/' + labelId + '?' + auth, { method: 'DELETE' });
+});
+
+Promise.all(removePromises)
+  .then(function() {
+    // Schritt 2: Neues KZF-Label setzen
+    return fetch(baseUrl + '/idLabels?' + auth, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'value=' + zielLabelId
     });
+  })
+  .then(function() {
+    // Schritt 3: Kommentar posten
+    return fetch(baseUrl + '/actions/comments?' + auth + '&text=' + encodeURIComponent(kommentar), {
+      method: 'POST'
+    });
+  })
+  .then(function(response) {
+    if (response.ok) {
+      window.location.href = 'about:blank';
+    } else {
+      alert('Fehler: Status ' + response.status);
+    }
+  })
+  .catch(function(err) {
+    alert('Fehler: ' + err.message);
+  });
   }
 </script>
 </body>
